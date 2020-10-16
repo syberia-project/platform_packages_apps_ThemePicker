@@ -106,7 +106,6 @@ public class ThemeFragment extends ToolbarFragment {
     private WallpaperInfo mCurrentHomeWallpaper;
     private CurrentWallpaperInfoFactory mCurrentWallpaperFactory;
     private TimeTicker mTicker;
-    private boolean mNoCustomWallpaper;
 
     @Override
     public void onAttach(Context context) {
@@ -231,7 +230,7 @@ public class ThemeFragment extends ToolbarFragment {
                 (homeWallpaper, lockWallpaper, presentationMode) -> {
                     mCurrentHomeWallpaper = homeWallpaper;
                     if (mSelectedTheme != null) {
-                        if (mUseMyWallpaper || mNoCustomWallpaper) {
+                        if (mUseMyWallpaper || (mSelectedTheme instanceof CustomTheme)) {
                             mSelectedTheme.setOverrideThemeWallpaper(homeWallpaper);
                         } else {
                             mSelectedTheme.setOverrideThemeWallpaper(null);
@@ -257,7 +256,8 @@ public class ThemeFragment extends ToolbarFragment {
     }
 
     private void updateButtonsVisibility() {
-        mUseMyWallpaperButton.setVisibility(mNoCustomWallpaper ? View.GONE : View.VISIBLE);
+        mUseMyWallpaperButton.setVisibility(mSelectedTheme instanceof CustomTheme
+                ? View.INVISIBLE : View.VISIBLE);
     }
 
     private void hideError() {
@@ -284,9 +284,7 @@ public class ThemeFragment extends ToolbarFragment {
                         navigateToCustomTheme((CustomTheme) selected);
                     } else {
                         mSelectedTheme = (ThemeBundle) selected;
-                        mNoCustomWallpaper = mSelectedTheme instanceof CustomTheme ||
-                                mSelectedTheme.getWallpaperInfo() == null;
-                        if (mUseMyWallpaper || mNoCustomWallpaper) {
+                        if (mUseMyWallpaper || mSelectedTheme instanceof CustomTheme) {
                             mSelectedTheme.setOverrideThemeWallpaper(mCurrentHomeWallpaper);
                         } else {
                             mSelectedTheme.setOverrideThemeWallpaper(null);
@@ -403,7 +401,7 @@ public class ThemeFragment extends ToolbarFragment {
 
             addPage(new ThemeCoverPage(activity, theme.getTitle(),
                     previewInfo.resolveAccentColor(res), previewInfo.icons,
-                    previewInfo.headlineFontFamily,
+                    previewInfo.headlineFontFamily, previewInfo.bottomSheeetCornerRadius,
                     previewInfo.shapeDrawable, previewInfo.shapeAppIcons, editClickListener,
                     mColorButtonIds, mColorTileIds, mColorTileIconIds, mShapeIconIds,
                     wallpaperListener, coverCardLayoutListener));
@@ -588,7 +586,7 @@ public class ThemeFragment extends ToolbarFragment {
                 if (mScrim != null) {
                     background = new LayerDrawable(new Drawable[]{background, mScrim});
                 }
-                ((ImageView) view.findViewById(R.id.theme_preview_card_background)).setImageDrawable(background);
+                view.findViewById(R.id.theme_preview_card_background).setBackground(background);
                 if (mScrim == null && !mIsTranslucent) {
                     boolean shouldRecycle = false;
                     if (bitmap.getConfig() == Config.HARDWARE) {

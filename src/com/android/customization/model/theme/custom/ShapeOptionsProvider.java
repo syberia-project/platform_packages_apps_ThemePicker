@@ -53,8 +53,6 @@ import java.util.List;
 public class ShapeOptionsProvider extends ThemeComponentOptionProvider<ShapeOption> {
 
     private static final String TAG = "ShapeOptionsProvider";
-    private static final int MAX_ICON_SHAPE_PREVIEWS = 6;
-
     private final String[] mShapePreviewIconPackages;
     private int mThumbSize;
 
@@ -77,7 +75,7 @@ public class ShapeOptionsProvider extends ThemeComponentOptionProvider<ShapeOpti
                 PackageManager pm = mContext.getPackageManager();
                 String label = pm.getApplicationInfo(overlayPackage, 0).loadLabel(pm).toString();
                 mOptions.add(new ShapeOption(overlayPackage, label, path,
-                        shapeDrawable, getShapedIcons(path)));
+                        loadCornerRadius(overlayPackage), shapeDrawable, getShapedIcons(path)));
             } catch (NameNotFoundException | NotFoundException e) {
                 Log.w(TAG, String.format("Couldn't load shape overlay %s, will skip it",
                         overlayPackage), e);
@@ -90,6 +88,9 @@ public class ShapeOptionsProvider extends ThemeComponentOptionProvider<ShapeOpti
         Path path = loadPath(system, ANDROID_PACKAGE);
         ShapeDrawable shapeDrawable = createShapeDrawable(path);
         mOptions.add(new ShapeOption(null, mContext.getString(R.string.default_theme_title), path,
+                system.getDimensionPixelOffset(
+                    system.getIdentifier(ResourceConstants.CONFIG_CORNERRADIUS,
+                        "dimen", ResourceConstants.ANDROID_PACKAGE)),
                 shapeDrawable, getShapedIcons(path)));
     }
 
@@ -104,10 +105,6 @@ public class ShapeOptionsProvider extends ThemeComponentOptionProvider<ShapeOpti
     private List<Drawable> getShapedIcons(Path path) {
         List<Drawable> icons = new ArrayList<>();
         for (String packageName : mShapePreviewIconPackages) {
-            if (icons.size() == MAX_ICON_SHAPE_PREVIEWS) {
-                break;
-            }
-
             try {
                 Drawable appIcon = mContext.getPackageManager().getApplicationIcon(packageName);
                 if (appIcon instanceof AdaptiveIconDrawable) {
@@ -131,5 +128,16 @@ public class ShapeOptionsProvider extends ThemeComponentOptionProvider<ShapeOpti
             return PathParser.createPathFromPathData(shape);
         }
         return null;
+    }
+
+    @Dimension
+    private int loadCornerRadius(String packageName)
+            throws NameNotFoundException, NotFoundException {
+
+        Resources overlayRes =
+                mContext.getPackageManager().getResourcesForApplication(
+                        packageName);
+        return overlayRes.getDimensionPixelOffset(overlayRes.getIdentifier(
+                CONFIG_CORNERRADIUS, "dimen", packageName));
     }
 }

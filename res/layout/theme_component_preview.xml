@@ -15,28 +15,19 @@
      limitations under the License.
 -->
 
-<FrameLayout
+
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/theme_preview_card_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
     android:maxHeight="@dimen/preview_theme_max_height"
-    android:minHeight="@dimen/preview_theme_min_height" >
-
-    <ImageView
-        android:id="@+id/theme_preview_card_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/theme_preview_card_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingHorizontal="@dimen/preview_card_padding"
-        android:paddingTop="@dimen/preview_card_top_padding"
-        android:clipToPadding="false" >
+    android:minHeight="@dimen/preview_theme_min_height"
+    android:paddingHorizontal="@dimen/preview_card_padding"
+    android:paddingTop="@dimen/preview_card_top_padding">
 
         <ViewStub
             android:id="@+id/theme_preview_top_bar"
@@ -57,7 +48,6 @@
             android:layout_gravity="center_horizontal"
             android:drawablePadding="@dimen/theme_preview_header_drawable_padding"
             android:textAppearance="@style/CardTitleTextAppearance"
-            android:gravity="center_horizontal"
             app:layout_constraintBottom_toTopOf="@id/theme_preview_card_body_container"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -109,5 +99,4 @@
             app:layout_constraintTop_toBottomOf="@+id/guideline"
             app:layout_constraintVertical_bias="0.5"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

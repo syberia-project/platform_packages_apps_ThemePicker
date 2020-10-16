@@ -85,7 +85,9 @@ class OverlayThemeExtractor {
             builder.addOverlayPackage(getOverlayCategory(shapeOverlayPackage),
                     shapeOverlayPackage)
                     .setShapePath(
-                            loadString(ResourceConstants.CONFIG_ICON_MASK, shapeOverlayPackage));
+                            loadString(ResourceConstants.CONFIG_ICON_MASK, shapeOverlayPackage))
+                    .setBottomSheetCornerRadius(
+                            loadDimen(ResourceConstants.CONFIG_CORNERRADIUS, shapeOverlayPackage));
         } else {
             addSystemDefaultShape(builder);
         }
@@ -134,11 +136,7 @@ class OverlayThemeExtractor {
             throws NameNotFoundException {
         builder.addOverlayPackage(getOverlayCategory(packageName), packageName);
         for (String iconName : previewIcons) {
-            try {
-                builder.addIcon(loadIconPreviewDrawable(iconName, packageName, false));
-            } catch (NameNotFoundException | NotFoundException e) {
-                Log.w(TAG, "Didn't find overlay icon " + iconName);
-            }
+            builder.addIcon(loadIconPreviewDrawable(iconName, packageName, false));
         }
     }
 
@@ -174,7 +172,11 @@ class OverlayThemeExtractor {
         String iconMaskPath = system.getString(
                 system.getIdentifier(ResourceConstants.CONFIG_ICON_MASK,
                         "string", ResourceConstants.ANDROID_PACKAGE));
-        builder.setShapePath(iconMaskPath);
+        builder.setShapePath(iconMaskPath)
+                .setBottomSheetCornerRadius(
+                        system.getDimensionPixelOffset(
+                                system.getIdentifier(ResourceConstants.CONFIG_CORNERRADIUS,
+                                        "dimen", ResourceConstants.ANDROID_PACKAGE)));
     }
 
     void addSystemDefaultColor(Builder builder) {
