@@ -84,4 +84,10 @@
     <string name="themed_icon_title" msgid="7312460430471956558">"Тематические значки"</string>
     <string name="beta_title" msgid="8703819523760746458">"Бета"</string>
     <string name="gird_picker_entry_content_description" msgid="9087651470212293439">"Настроить сетку приложений"</string>
+
+    <string name="wallpaper_color_tab">Цвета обоев</string>
+    <string name="wallpaper_color_title">Цвет обоев</string>
+    <string name="preset_color_tab">Основные цвета</string>
+    <string name="color_changed">Цвета изменены</string>
+
 </resources>
