@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.android.customization.model.font.FontManager;
 import com.android.customization.model.font.FontSectionController;
 import com.android.customization.model.grid.GridOptionsManager;
-import com.android.customization.model.grid.GridSectionController;
 import com.android.customization.model.iconpack.IconPackManager;
 import com.android.customization.model.iconpack.IconPackSectionController;
 import com.android.customization.model.iconshape.IconShapeManager;
